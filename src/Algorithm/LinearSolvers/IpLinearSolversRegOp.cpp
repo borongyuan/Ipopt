@@ -25,6 +25,9 @@
 #ifdef IPOPT_HAS_SPRAL
 # include "IpSpralSolverInterface.hpp"
 #endif
+#ifdef IPOPT_HAS_SYLVER
+# include "IpSylverSolverInterface.hpp"
+#endif
 #ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
@@ -73,6 +76,11 @@ void RegisterOptions_LinearSolvers(
 #ifdef IPOPT_HAS_SPRAL
    roptions->SetRegisteringCategory("SPRAL Linear Solver");
    SpralSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef IPOPT_HAS_SYLVER
+   roptions->SetRegisteringCategory("SyLVER Linear Solver");
+   SylverSolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef IPOPT_HAS_WSMP

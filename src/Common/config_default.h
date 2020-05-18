@@ -72,5 +72,6 @@
 #define IPOPT_LAPACK_FUNC(name,NAME)  F77_FUNC(name,NAME)
 #define IPOPT_PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)
 #define IPOPT_SPRAL_FUNC(name,NAME)   F77_FUNC(name,NAME)
+#define IPOPT_SYLVER_FUNC(name,NAME)  F77_FUNC(name,NAME)
 #define IPOPT_WSMP_FUNC(name,NAME)    F77_FUNC(name,NAME)
 #define IPOPT_WSMP_FUNC_(name,NAME)   F77_FUNC_(name,NAME)

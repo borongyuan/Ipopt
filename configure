@@ -666,6 +666,8 @@ BIT32FCOMMENT
 BITS_PER_POINTER
 HAVE_WSMP_FALSE
 HAVE_WSMP_TRUE
+HAVE_SYLVER_FALSE
+HAVE_SYLVER_TRUE
 HAVE_SPRAL_FALSE
 HAVE_SPRAL_TRUE
 HAVE_PARDISO_FALSE
@@ -885,6 +887,7 @@ with_hsl_lflags
 with_hsl_cflags
 with_pardiso
 with_spral
+with_sylver
 with_wsmp
 enable_inexact_solver
 enable_java
@@ -1613,6 +1616,7 @@ Optional Packages:
   --with-pardiso          specify Pardiso library (>= 4.0) from
                           pardiso-project.org
   --with-spral            specify SPRAL library
+  --with-sylver           specify SyLVER library
   --with-wsmp             specify WSMP library
 
 Some influential environment variables:
@@ -24552,7 +24556,6 @@ else
 fi
 
 
-    #[AC_COIN_DEFINENAMEMANGLING([SPRAL],[$spral_namemangling])
 if test "$have_spral" = "yes"; then
 
   # setup LIBS by adding $spral_lflags and those from
@@ -24642,6 +24645,111 @@ fi
 else
   HAVE_SPRAL_TRUE='#'
   HAVE_SPRAL_FALSE=
+fi
+
+
+##########
+# SYLVER #
+##########
+
+
+# Check whether --with-sylver was given.
+if test "${with_sylver+set}" = set; then :
+  withval=$with_sylver; have_sylver=yes; sylver_lflags=$withval
+else
+  have_sylver=no
+fi
+
+
+if test "$have_sylver" = "yes"; then
+
+  # setup LIBS by adding $sylver_lflags and those from
+  ac_save_LIBS="$LIBS"
+  LIBS="$sylver_lflags $LIBS"
+
+
+  spldlt_analyse_namemangling=unknown
+
+  # FIXME we had "extra underscore" as additional option for ac_extra
+  #   but since there is no use for ac_extra below, was there any use for it?
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
+        case $ac_case in
+          "lower case")
+            ac_name=spldlt_analyse
+            ;;
+          "upper case")
+            ac_name=SPLDLT_ANALYSE
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $ac_name ();
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+return $ac_name ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  spldlt_analyse_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+    IPOPTLIB_LFLAGS="$sylver_lflags $IPOPTLIB_LFLAGS"
+
+$as_echo "#define HAVE_SYLVER 1" >>confdefs.h
+
+
+    else as_fn_error $? "Symbol ssids_solve not found with SyLVER flags $sylver_lflags." "$LINENO" 5
+  fi
+
+fi
+
+ if test $have_sylver = yes; then
+  HAVE_SYLVER_TRUE=
+  HAVE_SYLVER_FALSE='#'
+else
+  HAVE_SYLVER_TRUE='#'
+  HAVE_SYLVER_FALSE=
 fi
 
 
@@ -25289,7 +25397,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25292 "configure" */
+/* #line 25400 "configure" */
 public class Test {
 }
 EOF
@@ -25775,7 +25883,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25778 "configure" */
+/* #line 25886 "configure" */
 public class Test {
 }
 EOF
@@ -25809,7 +25917,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25812 "configure" */
+/* [#]line 25920 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26831,6 +26939,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_SPRAL_TRUE}" && test -z "${HAVE_SPRAL_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_SPRAL\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_SYLVER_TRUE}" && test -z "${HAVE_SYLVER_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_SYLVER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then

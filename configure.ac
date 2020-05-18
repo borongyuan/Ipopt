@@ -163,7 +163,6 @@ AC_ARG_WITH([spral],
             [have_spral=yes; spral_lflags=$withval],
             [have_spral=no])
 
-    #[AC_COIN_DEFINENAMEMANGLING([SPRAL],[$spral_namemangling])
 if test "$have_spral" = "yes"; then
   AC_COIN_TRY_LINK([spral_ssids_analyse],[$spral_lflags],[],
     [IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
@@ -173,6 +172,25 @@ if test "$have_spral" = "yes"; then
 fi
 
 AM_CONDITIONAL([HAVE_SPRAL],[test $have_spral = yes])
+
+##########
+# SYLVER #
+##########
+
+AC_ARG_WITH([sylver],
+            AC_HELP_STRING([--with-sylver],[specify SyLVER library]),
+            [have_sylver=yes; sylver_lflags=$withval],
+            [have_sylver=no])
+
+if test "$have_sylver" = "yes"; then
+  AC_COIN_TRY_LINK([spldlt_analyse],[$sylver_lflags],[],
+    [IPOPTLIB_LFLAGS="$sylver_lflags $IPOPTLIB_LFLAGS"
+     AC_DEFINE(HAVE_SYLVER,1,[Define to 1 if SyLVER is available])
+    ],
+    [AC_MSG_ERROR([Symbol ssids_solve not found with SyLVER flags $sylver_lflags.])])
+fi
+
+AM_CONDITIONAL([HAVE_SYLVER],[test $have_sylver = yes])
 
 ########
 # WSMP #

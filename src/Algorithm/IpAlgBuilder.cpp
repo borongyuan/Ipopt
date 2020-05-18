@@ -65,6 +65,9 @@
 #ifdef IPOPT_HAS_SPRAL
 # include "IpSpralSolverInterface.hpp"
 #endif
+#ifdef IPOPT_HAS_SYLVER
+# include "IpSylverSolverInterface.hpp"
+#endif
 #ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
@@ -116,16 +119,20 @@ void AlgorithmBuilder::RegisterOptions(
 #     ifdef IPOPT_HAS_SPRAL
        "spral",
 #     else
-#      ifdef IPOPT_HAS_WSMP
-        "wsmp",
+#      ifdef IPOPT_HAS_SYLVER
+        "sylver",
 #      else
-#       ifdef IPOPT_HAS_MUMPS
-         "mumps",
+#       ifdef IPOPT_HAS_WSMP
+         "wsmp",
 #       else
-#        ifdef COINHSL_HAS_MA77
-          "ma77",
+#        ifdef IPOPT_HAS_MUMPS
+          "mumps",
 #        else
-          "ma27",
+#         ifdef COINHSL_HAS_MA77
+           "ma77",
+#         else
+           "ma27",
+#         endif
 #        endif
 #       endif
 #      endif
@@ -142,6 +149,7 @@ void AlgorithmBuilder::RegisterOptions(
       "ma97", "use the Harwell routine HSL_MA97",
       "pardiso", "use the Pardiso package",
       "spral", "use the SPRAL package",
+      "sylver", "use the SyLVER package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
       "custom", "use custom linear solver",
@@ -395,6 +403,14 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
       SolverInterface = new SpralSolverInterface();
 #else
       THROW_EXCEPTION(OPTION_INVALID, "Selected linear solver SPRAL not available.");
+#endif
+
+   else if( linear_solver == "sylver" )
+   {
+#ifdef IPOPT_HAS_SYLVER
+      SolverInterface = new SylverSolverInterface();
+#else
+      THROW_EXCEPTION(OPTION_INVALID, "Selected linear solver SyLVER not available.");
 #endif
 
    }

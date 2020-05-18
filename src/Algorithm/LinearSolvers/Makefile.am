@@ -49,6 +49,10 @@ if HAVE_SPRAL
   liblinsolvers_la_SOURCES += IpSpralSolverInterface.cpp
 endif
 
+if HAVE_SYLVER
+  liblinsolvers_la_SOURCES += IpSylverSolverInterface.cpp
+endif
+
 #liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = \

@@ -483,6 +483,26 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("spral_use_gpu");
 #endif
 
+#ifdef IPOPT_HAS_SYLVER
+
+            options_to_print.push_back("#SyLVER Linear Solver");
+            options_to_print.push_back("sylver_cpu_block_size");
+            options_to_print.push_back("sylver_gpu_perf_coeff");
+            options_to_print.push_back("sylver_ignore_numa");
+            options_to_print.push_back("sylver_max_load_inbalance");
+            options_to_print.push_back("sylver_min_gpu_work");
+            options_to_print.push_back("sylver_nemin");
+            options_to_print.push_back("sylver_order");
+            options_to_print.push_back("sylver_pivot_method");
+            options_to_print.push_back("sylver_print_level");
+            options_to_print.push_back("sylver_scaling");
+            options_to_print.push_back("sylver_small");
+            options_to_print.push_back("sylver_small_subtree_threshold");
+            options_to_print.push_back("sylver_u");
+            options_to_print.push_back("sylver_umax");
+            options_to_print.push_back("sylver_use_gpu");
+#endif
+
 #ifdef IPOPT_HAS_WSMP
 
             options_to_print.push_back("#WSMP Linear Solver");
@@ -526,6 +546,10 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 #ifdef IPOPT_HAS_SPRAL
 
             categories.push_back("SPRAL Linear Solver");
+#endif
+#ifdef IPOPT_HAS_SYLVER
+
+            categories.push_back("SYLVER Linear Solver");
 #endif
 #ifdef IPOPT_HAS_WSMP
 
